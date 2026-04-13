@@ -1,85 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { StatusBar } from "expo-status-bar";
+
+// Importando a modelagem TypeScript
 import { Especialidade } from "./src/types/especialidades";
 import { Paciente } from "./src/types/paciente";
 import { Medico } from "./src/interfaces/medico";
 import { Consulta } from "./src/interfaces/consulta";
 
-type Consulta = {
-  id: number;
-  paciente: string;
-  medico: string;
-  data: string;
-  status: "agendada" | "confirmada" | "cancelada" | "realizada";
-};
+// Importando o componente reutilizável
+import { ConsultaCard } from "./src/components/";
 
 export default function App() {
-  const [consulta, setConsulta] = useState<Consulta>({
-    id: 1,
-    paciente: "Carlos Andrade",
-    medico: "Dr. Roberto Silva",
-    data: "28/02/2026",
-    status: "agendada",
-  });
-
-  function confirmarConsulta() {
-    setConsulta({
-      ...consulta,
-      status: "confirmada",
-    });
-  }
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Sistema de Consultas</Text>
-
-      <View style={styles.card}>
-        <Text style={styles.textoCard}>Paciente: {consulta.paciente}</Text>
-        <Text style={styles.textoCard}>Médico: {consulta.medico}</Text>
-        <Text style={styles.textoCard}>Data: {consulta.data}</Text>
-        <Text style={styles.textoCard}>Status: {consulta.status}</Text>
-
-        {consulta.status === "agendada" && (
-          <View style={styles.botao}>
-            <Button
-              title="Confirmar Consulta"
-              onPress={confirmarConsulta}
-            />
-          </View>
-        )}
-      </View>
-    </View>
-  );
-}
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffea30",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  titulo: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  card: {
-    width: "80%",
-    padding: 20,
-    borderWidth: 2,
-    borderRadius: 12,
-    backgroundColor: "#fffed0",
-  },
-  textoCard: {
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  botao: {
-    marginTop: 15,
-  },
-});
+  // Dados base (simulando o que tínhamos no backend)
   const cardiologia: Especialidade = {
     id: 1,
     nome: "Cardiologia",
@@ -87,45 +20,101 @@ const styles = StyleSheet.create({
   };
 
   const medico1: Medico = {
-  id: 1,
-  nome: "Dr. Roberto Silva",
-  crm: "CRM12345",
-  especialidade: cardiologia,
-  ativo: true,
-};
+    id: 1,
+    nome: "Dr. Roberto Silva",
+    crm: "CRM12345",
+    especialidade: cardiologia,
+    ativo: true,
+  };
 
-const paciente1: Paciente = {
-  id: 1,
-  nome: "Carlos Andrade",
-  cpf: "123.456.789-00",
-  email: "carlos@email.com",
-  telefone: "(11) 98765-4321",
-};
+  const paciente1: Paciente = {
+    id: 1,
+    nome: "Carlos Andrade",
+    cpf: "123.456.789-00",
+    email: "carlos@email.com",
+    telefone: "(11) 98765-4321",
+  };
 
-const [consulta, setConsulta] = useState<Consulta>({
-  id: 1,
-  Medico: medico1,
-  Paciente: paciente1,
-  Data: new Date(2026, 2, 10),
-  valor: 350,
-  status: "agendada",
-  observacoes: "Consulta de rotina",
+  // Estado da consulta
+  const [consulta, setConsulta] = useState<Consulta>({
+    id: 1,
+    medico: medico1,
+    paciente: paciente1,
+    data: new Date(2026, 2, 10), // 10/03/2026
+    valor: 350,
+    status: "agendada",
+    observacoes: "Consulta de rotina",
+  });
+  function confirmarConsulta() {
+    setConsulta({
+      ...consulta,
+      status: "confirmada",
+    });
+  }
+
+  function cancelarConsulta() {
+    setConsulta({
+      ...consulta,
+      status: "cancelada",
+    });
+  }
+
+  return (
+    <View style={styles.container}>
+      <StatusBar style="light" />
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Cabeçalho */}
+        <View style={styles.header}>
+          <Text style={styles.titulo}>Sistema de Consultas</Text>
+          <Text style={styles.subtitulo}>Consulta #{consulta.id}</Text>
+        </View>
+        <ConsultaCard
+          consulta={consulta}
+          onConfirmar={confirmarConsulta}
+          onCancelar={cancelarConsulta}
+        />
+
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ffea30",
+  },
+  scrollContent: {
+    padding: 20,
+    paddingTop: 60,
+  },
+  header: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  titulo: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 8,
+  },
+  subtitulo: {
+    fontSize: 18,
+    color: "#fff",
+    opacity: 0.9,
+  },
+  rodape: {
+    marginTop: 24,
+    padding: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: 12,
+  },
+  rodapeTexto: {
+    fontSize: 12,
+    color: "#fff",
+    textAlign: "center",
+    lineHeight: 18,
+    marginBottom: 4,
+  },
 });
-
-function confirmarConsulta() {
-  setConsulta({
-    ...consulta,
-    status: "confirmada",
-  });
-}
-
-function formatarValor(valor: number): string {
-  return valor.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-}
-
-function formatarData(data: Date): string {
-  return data.toLocaleDateString("pt-BR");
-}
