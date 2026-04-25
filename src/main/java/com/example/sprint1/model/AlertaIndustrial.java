@@ -16,6 +16,8 @@ public class AlertaIndustrial {
     private String nivelSeveridade;
     private String dataHora;
     private Boolean resolvido;
+    private String individuosSobRisco;
+    private String gruposNotificados;
 
     public AlertaIndustrial() {
     }
@@ -54,6 +56,13 @@ public class AlertaIndustrial {
         return dataHora;
     }
 
+    public String getIndividuosAfetados() {
+    return individuosSobRisco;
+    }
+    public String getGruposNotificados() {
+    return gruposNotificados;
+    }
+
     public Boolean getResolvido() {
         return resolvido;
     }
@@ -84,5 +93,12 @@ public class AlertaIndustrial {
 
     public void setResolvido(Boolean resolvido) {
         this.resolvido = resolvido;
+    }
+    public void setIndividuosSobRisco(String individuosAfetados) {
+    this.individuosSobRisco = individuosAfetados;
+    
+    }
+    public void setGruposNotificados(String gruposNotificados) {
+    this.gruposNotificados = gruposNotificados;
     }
 }

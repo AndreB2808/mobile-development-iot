@@ -36,6 +36,8 @@ public class AlertaIndustrialService {
         alertaExistente.setNivelSeveridade(alertaAtualizado.getNivelSeveridade());
         alertaExistente.setDataHora(alertaAtualizado.getDataHora());
         alertaExistente.setResolvido(alertaAtualizado.getResolvido());
+        alertaExistente.setIndividuosSobRisco(alertaAtualizado.getIndividuosAfetados());
+        alertaExistente.setGruposNotificados(alertaAtualizado.getGruposNotificados());
         return repository.save(alertaExistente);
     }
 
